@@ -1,7 +1,7 @@
 $(function(){
 	
     var array = []
-    var documentInput = document.getElementsByClassName(".valeur")
+    
 
     $.ajax({
         url: 'https://thronesapi.com/api/v2/Characters',
@@ -18,18 +18,16 @@ $(function(){
 
     // function qui boucle mes data dans un tableau qui s'apelle array
     function tableauDisplay(data){
-        console.log(" log de data",data);
         $("#mettre").html(''); 
         data.forEach(function(personnage, index) {
-            console.log("les personnage sont",personnage.firstName , index)
-            
             $("#mettre").html( $("#mettre").html() + `  
 
                         <div class="col-4 mt-5">
                             <div>
                                 <figure class="figure">
-                                    <img class="img-fluid" src="${personnage.imageUrl}" alt="personage de game of throne ${personnage.fullName}"/>
-                                    <figcaption class="text-dark fw-bold figure-caption text-start">${personnage.fullName} </br>${personnage.title}</figcaption>
+                                    <img  src="${personnage.imageUrl}" alt="personage de game of throne ${personnage.fullName}"/>
+                                    <figcaption class="text-dark fw-bold figure-caption mt-3 text-start">${personnage.fullName} </br>${personnage.title}</figcaption>
+                                    <figcaption class="text-dark fw-bold figure-caption mt-3 text-start">${personnage.title}</figcaption>
                                 </figure>  
                             </div>
                         </div>
@@ -37,11 +35,10 @@ $(function(){
         })
     }
     
-    // function qui recup la valeur de l'input
+    // function qui recup la valeur de l'input et la compare avec le fullname de mes object
      
         $("button").click(function(){
-           var valeurInput = $("input").val().toLowerCase();
-            console.log(valeurInput);
+            var valeurInput = $("input").val().toLowerCase();
             var resulta = array.filter(function(person) {
                 return person.fullName.toLowerCase().includes(valeurInput);
               });
@@ -49,8 +46,18 @@ $(function(){
               tableauDisplay(resulta)
         });
         
-   
-    
-
+        // 
+        $("#random").click(function(){
+            var arrayShuffle = _.shuffle(array);
+            // fonction qui me boucle mon nouveau tableau pour l'afficher par la suite en lui passant la variable qui contient mon arrayshuffle
+            tableauDisplay(arrayShuffle)
+        });
+        //  code qui permet de trié un array par ordre alphabétique grace a lodash
+        $("#trie").click(function(){
+            console.log("salut sa marche");
+            var triage = _.sortBy(array, ['type', 'fullName']);
+            
+            tableauDisplay(triage)
+        });
 
 });
